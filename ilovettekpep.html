@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Peptide Journal 🎀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fff5f8;
+            --card-bg: #ffffff;
+            --primary-pink: #ffb6c1;
+            --soft-lavender: #f3e8ff;
+            --accent-pink: #ff85a2;
+            --text-color: #5c4b51;
+            --save-green: #10b981;
+            --view-blue: #60a5fa;
+            --link-bg: #ffe4e9;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            /* Extra padding at bottom so the sticky footer doesn't cover the last entry */
+            padding: 20px 20px 140px 20px; 
+            line-height: 1.6;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .banner-container {
+            width: 100%;
+            height: 40vh; 
+            overflow: hidden;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .banner-image {
+            height: 100%;
+            width: auto;
+            display: block;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid #ffe4e9;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--accent-pink); }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            font-family: 'Quicksand', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .peptide-entry {
+            background: #fff9fa;
+            border: 2px dashed var(--primary-pink);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .btn-day {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 2px solid var(--soft-lavender);
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-day.active { background: var(--accent-pink); color: white; border-color: var(--accent-pink); }
+
+        .weight-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: #f0faff;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-main {
+            background: var(--accent-pink);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-save { background: var(--save-green); }
+        .btn-view { background: var(--view-blue); }
+        .btn-clear { background: #9ca3af; font-size: 11px; }
+
+        .btn-add-peptide {
+            background: #bde0fe;
+            color: #3d5a80;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* --- STICKY FOOTER RESOURCES --- */
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-top: 3px solid var(--primary-pink);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 15px 10px;
+            z-index: 200;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
+
+        .footer-link {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .footer-link:hover {
+            transform: translateY(-3px);
+            color: var(--accent-pink);
+            background: var(--bg-color);
+        }
+
+        .link-icon {
+            font-size: 18px;
+            background: var(--link-bg);
+            padding: 4px;
+            border-radius: 50%;
+        }
+
+        /* Modal styling */
+        #viewModal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; max-height: 80%; background: white; z-index: 1000;
+            padding: 30px; border-radius: 25px; box-shadow: 0 0 50px rgba(0,0,0,0.3); overflow-y: auto;
+        }
+
+        #modalOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="banner-container">
+        <img src="cutey.png" alt="Banner" class="banner-image">
+    </div>
+
+    <div class="card profile-grid">
+        <div><label>Name 💖</label><input type="text" id="userName"></div>
+        <div><label>Age 🎂</label><input type="number" id="userAge"></div>
+        <div><label>Start Date ✨</label><input type="date" id="startDate"></div>
+        <div><label>Send To Email 📧</label><input type="email" id="targetEmail" placeholder="coach@example.com"></div>
+    </div>
+
+    <div id="journal-container"></div>
+
+    <div class="controls">
+        <button class="btn-main" onclick="addNewWeek()">➕ Add Week</button>
+        <button class="btn-main btn-save" onclick="saveData()">💾 Save Progress</button>
+        <button class="btn-main btn-view" onclick="viewSummary()">👁️ View Summary</button>
+        <button class="btn-main" style="background:#8b5cf6;" onclick="emailProgress()">📧 Send to Email</button>
+        <button class="btn-main btn-clear" onclick="clearData()">🗑️ Clear All</button>
+    </div>
+</div>
+
+<div class="sticky-footer">
+    <a href="How.png" class="footer-link">
+        <span class="link-icon">🐶🐱</span>
+        Reconstitution
+    </a>
+    <a href="https://cellgenic.com/peptide-calculator/" target="_blank" class="footer-link">
+        <span class="link-icon">🐕🐈</span>
+        Peptide Calculator
+    </a>
+    <a href="Tirze.png" class="footer-link">
+        <span class="link-icon">🐩🐈‍⬛</span>
+        Tirzepatide Info
+    </a>
+    <a href="FAQS.png" class="footer-link">
+        <span class="link-icon">🐱🐶</span>
+        FAQs
+    </a>
+</div>
+
+<div id="modalOverlay" onclick="closeModal()"></div>
+<div id="viewModal">
+    <h2 style="color:var(--accent-pink)">Journal Summary</h2>
+    <div id="summaryContent"></div>
+    <button class="btn-main" onclick="closeModal()">Close</button>
+</div>
+
+<template id="peptide-template">
+    <div class="peptide-entry">
+        <div style="display:flex; justify-content:space-between;">
+            <h4 style="margin:0; color:var(--accent-pink);">Peptide Item</h4>
+            <button onclick="this.parentElement.parentElement.remove()" style="color:red; background:none; border:none; cursor:pointer;">✖</button>
+        </div>
+        <div class="profile-grid" style="margin-top:10px;">
+            <input type="text" class="p-name" placeholder="Peptide Name">
+            <input type="text" class="p-dose" placeholder="Dosage">
+            <select class="p-for">
+                <option>Weight management</option>
+                <option>Appetite Suppression</option>
+                <option>Beauty</option>
+                <option>Strength</option>
+                <option>Fat melters</option>
+            </select>
+            <input type="text" class="p-site" placeholder="Injection Site">
+            <input type="text" class="p-freq" placeholder="Frequency">
+        </div>
+        <div style="margin-top:10px;">
+            <label>Days Selected:</label>
+            <div class="days-row">
+                <button class="btn-day" onclick="this.classList.toggle('active')">Mon</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Tue</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Wed</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Thu</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Fri</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Sat</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Sun</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    function addNewWeek(savedData = null) {
+        const container = document.getElementById('journal-container');
+        const weekNum = container.children.length + 1;
+        const weekCard = document.createElement('div');
+        weekCard.className = 'card week-card';
+        weekCard.innerHTML = `
+            <h3>Week ${weekNum} 🌸</h3>
+            <div class="peptides-stack"></div>
+            <button class="btn-add-peptide" onclick="addPeptide(this.previousElementSibling)">➕ Add Peptide to Stack</button>
+            <div class="weight-grid">
+                <div><label>Start</label><input type="number" class="w-start"></div>
+                <div><label>Goal</label><input type="number" class="w-goal"></div>
+                <div><label>End</label><input type="number" class="w-end"></div>
+            </div>
+            <textarea class="w-notes" placeholder="Notes..."></textarea>
+        `;
+        container.appendChild(weekCard);
+        if (savedData) {
+            weekCard.querySelector('.w-start').value = savedData.startWt;
+            weekCard.querySelector('.w-goal').value = savedData.goalWt;
+            weekCard.querySelector('.w-end').value = savedData.endWt;
+            weekCard.querySelector('.w-notes').value = savedData.notes;
+            savedData.peptides.forEach(p => addPeptide(weekCard.querySelector('.peptides-stack'), p));
+        } else {
+            addPeptide(weekCard.querySelector('.peptides-stack'));
+        }
+    }
+
+    function addPeptide(stack, data = null) {
+        const temp = document.getElementById('peptide-template');
+        const clone = temp.content.cloneNode(true);
+        const div = clone.querySelector('.peptide-entry');
+        if (data) {
+            div.querySelector('.p-name').value = data.name;
+            div.querySelector('.p-dose').value = data.dose;
+            div.querySelector('.p-for').value = data.for;
+            div.querySelector('.p-site').value = data.site;
+            div.querySelector('.p-freq').value = data.freq;
+            const buttons = div.querySelectorAll('.btn-day');
+            data.days.forEach((active, i) => { if(active) buttons[i].classList.add('active'); });
+        }
+        stack.appendChild(clone);
+    }
+
+    function collectData() {
+        const journal = {
+            profile: {
+                name: document.getElementById('userName').value,
+                age: document.getElementById('userAge').value,
+                start: document.getElementById('startDate').value,
+                target: document.getElementById('targetEmail').value
+            },
+            weeks: []
+        };
+        document.querySelectorAll('.week-card').forEach((card, index) => {
+            const week = {
+                num: index + 1,
+                startWt: card.querySelector('.w-start').value,
+                goalWt: card.querySelector('.w-goal').value,
+                endWt: card.querySelector('.w-end').value,
+                notes: card.querySelector('.w-notes').value,
+                peptides: []
+            };
+            card.querySelectorAll('.peptide-entry').forEach(p => {
+                const days = Array.from(p.querySelectorAll('.btn-day')).map(b => b.classList.contains('active'));
+                week.peptides.push({
+                    name: p.querySelector('.p-name').value,
+                    dose: p.querySelector('.p-dose').value,
+                    for: p.querySelector('.p-for').value,
+                    site: p.querySelector('.p-site').value,
+                    freq: p.querySelector('.p-freq').value,
+                    activeDays: dayNames.filter((d, i) => days[i]).join(", ")
+                });
+            });
+            journal.weeks.push(week);
+        });
+        return journal;
+    }
+
+    function saveData() {
+        localStorage.setItem('peptideJournalData', JSON.stringify(collectData()));
+        alert("Progress saved! ✨");
+    }
+
+    function viewSummary() {
+        const data = collectData();
+        let html = `<p><strong>Name:</strong> ${data.profile.name} | <strong>Start:</strong> ${data.profile.start}</p>`;
+        data.weeks.forEach(w => {
+            html += `<hr><h4>Week ${w.num}</h4><p>Weight: ${w.startWt} -> ${w.endWt}</p>`;
+            w.peptides.forEach(p => {
+                html += `<p>🌸 ${p.name} (${p.dose}) - For: ${p.for}<br><small>Days: ${p.activeDays}</small></p>`;
+            });
+            html += `<p><em>Notes: ${w.notes}</em></p>`;
+        });
+        document.getElementById('summaryContent').innerHTML = html;
+        document.getElementById('viewModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    function emailProgress() {
+        const data = collectData();
+        const email = data.profile.target || "";
+        const subject = `Peptide Journal Progress - ${data.profile.name}`;
+        let body = `Hello! Here is my progress update:\n\n`;
+        body += `Name: ${data.profile.name}\nStart Date: ${data.profile.start}\n\n`;
+        data.weeks.forEach(w => {
+            body += `--- WEEK ${w.num} ---\nWeight: ${w.startWt} to ${w.endWt}\n`;
+            w.peptides.forEach(p => { body += `- ${p.name} | Dose: ${p.dose} | Days: ${p.activeDays}\n`; });
+            body += `Notes: ${w.notes}\n\n`;
+        });
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function closeModal() {
+        document.getElementById('viewModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function loadData() {
+        const raw = localStorage.getItem('peptideJournalData');
+        if (!raw) { addNewWeek(); return; }
+        const data = JSON.parse(raw);
+        document.getElementById('userName').value = data.profile.name || "";
+        document.getElementById('userAge').value = data.profile.age || "";
+        document.getElementById('startDate').value = data.profile.start || "";
+        document.getElementById('targetEmail').value = data.profile.target || "";
+        data.weeks.forEach(w => addNewWeek(w));
+    }
+
+    function clearData() { if(confirm("Clear everything?")) { localStorage.removeItem('peptideJournalData'); location.reload(); } }
+
+    window.onload = loadData;
+</script>
+
+</body>
+</html>
