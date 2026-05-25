@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Peptide Journal 🎀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // 🛠️ CONFIGURATION CREDENTIALS AREA:
+        const EMAILJS_PUBLIC_KEY = "jnZH0vBpR7dvUDt9X";  
+        const EMAILJS_SERVICE_ID = "service_yqpn0uh";  
+        const EMAILJS_TEMPLATE_ID = "template_i263408"; 
+
+        (function() {
+            if (EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            }
+        })();
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #fff5f8;
+            --card-bg: #ffffff;
+            --primary-pink: #ffb6c1;
+            --soft-lavender: #f3e8ff;
+            --accent-pink: #ff85a2;
+            --text-color: #5c4b51;
+            --save-green: #10b981;
+            --view-blue: #60a5fa;
+            --link-bg: #ffe4e9;
+            --alert-pink-dark: #ff4d7d;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px 20px 200px 20px; 
+            line-height: 1.6;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .banner-container {
+            width: 100%;
+            height: 40vh; 
+            overflow: hidden;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .banner-image {
+            height: 100%;
+            width: auto;
+            display: block;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid #ffe4e9;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .calc-results {
+            background: #fff0f3;
+            border: 2px dashed var(--accent-pink);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .calc-results p {
+            margin: 5px 0;
+            font-weight: 600;
+        }
+
+        .replenish-alert {
+            display: none;
+            background: #fff1f2;
+            color: var(--alert-pink-dark);
+            border: 2px dashed var(--accent-pink);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 2px 8px rgba(255, 133, 162, 0.2);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); box-shadow: 0 4px 12px rgba(255, 133, 162, 0.3); }
+            100% { transform: scale(1); }
+        }
+
+        label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--accent-pink); }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            font-family: 'Quicksand', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .peptide-entry {
+            background: #fff9fa;
+            border: 2px dashed var(--primary-pink);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .btn-day {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 2px solid var(--soft-lavender);
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-day.active { background: var(--accent-pink); color: white; border-color: var(--accent-pink); }
+
+        .weight-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: #f0faff;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-main {
+            background: var(--accent-pink);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255, 133, 162, 0.3); }
+
+        .btn-save { background: var(--save-green); }
+        .btn-save:hover { box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+        .btn-view { background: var(--view-blue); }
+        .btn-view:hover { box-shadow: 0 6px 15px rgba(96, 165, 250, 0.3); }
+        .btn-clear { background: #9ca3af; font-size: 11px; }
+
+        .btn-add-peptide {
+            background: #bde0fe;
+            color: #3d5a80;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border-top: 3px solid var(--primary-pink);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 15px 10px;
+            z-index: 200;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
+
+        .footer-link {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease-in-out;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .footer-link:hover {
+            transform: translateY(-3px);
+            color: var(--accent-pink);
+            background: var(--bg-color);
+            box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+        }
+
+        .link-icon {
+            font-size: 18px;
+            background: var(--link-bg);
+            padding: 4px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #viewModal, #shopModal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 92%; max-width: 650px; max-height: 90%; background: white; z-index: 1000;
+            padding: 30px; border-radius: 24px; box-shadow: 0 15px 50px rgba(92, 75, 81, 0.15); overflow-y: auto;
+            border: 2px solid #ffe4e9;
+        }
+
+        #mediaModal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            max-width: 85%; max-height: 85%; background: white; z-index: 1050;
+            padding: 20px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+            text-align: center; border: 3px solid var(--primary-pink);
+        }
+
+        #mediaModal img {
+            max-width: 100%; max-height: 65vh; border-radius: 14px; object-fit: contain;
+        }
+
+        #modalOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(92, 75, 81, 0.4); backdrop-filter: blur(4px); z-index: 999;
+        }
+
+        /* --- BOUTIQUE DESIGN STYLES --- */
+        .shop-banner {
+            width: 100%; height: auto; border-radius: 16px; overflow: hidden; margin-bottom: 20px;
+            position: relative; border: 1px solid #ffe4e9;
+        }
+        .shop-banner-img {
+            width: 100%; height:auto; display: block;};
+        }
+
+        .step-section {
+            margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #f3d1d9;
+        }
+        .step-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 24px; height: 24px; background: var(--accent-pink); color: white;
+            border-radius: 50%; font-size: 12px; font-weight: 700; margin-right: 8px;
+        }
+        .step-title { font-size: 16px; font-weight: 700; color: var(--text-color); margin: 0 0 12px 0; }
+
+        .type-switcher {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;
+        }
+        
+        .delivery-selection-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;
+        }
+        
+        .courier-girly-btn {
+            border: 2px solid #ffe4e9; border-radius: 14px; padding: 12px;
+            cursor: pointer; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; text-align: center; background: white; transition: all 0.2s ease;
+        }
+        .courier-girly-btn:hover { border-color: var(--primary-pink); background: #fffbfb; }
+        .courier-girly-btn.active {
+            border-color: var(--accent-pink); background: #fff0f3;
+            box-shadow: 0 2px 8px rgba(255, 133, 162, 0.15);
+        }
+        .courier-title { font-weight: 700; font-size: 13px; color: var(--text-color); margin-bottom: 2px; }
+        .courier-girly-btn.active .courier-title { color: var(--accent-pink); }
+        .courier-subnote { font-size: 10px; color: #9e8a90; font-weight: 600; line-height: 1.2; }
+
+        .switch-btn {
+            padding: 12px; border: 2px solid #ffe4e9; border-radius: 12px; background: white;
+            cursor: pointer; font-weight: 700; font-family: 'Quicksand', sans-serif; transition: all 0.2s;
+            text-align: center; font-size: 13px; color: var(--text-color);
+        }
+        .switch-btn.active {
+            border-color: var(--accent-pink); background: #fff0f3; color: var(--accent-pink);
+        }
+
+        .choice-card {
+            border: 2px solid #ffe4e9; border-radius: 14px; padding: 15px; margin-bottom: 10px;
+            cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+            transition: all 0.2s; background: white;
+        }
+        .choice-card:hover { border-color: var(--primary-pink); background: #fffbfb; }
+        .choice-card.selected { border-color: var(--accent-pink); background: #fff0f3; }
+        
+        .choice-radio {
+            width: 18px; height: 18px; accent-color: var(--accent-pink); margin-right: 12px;
+        }
+
+        .inclusions-box {
+            background: #fff9fa; border: 1px solid #ffe4e9; border-radius: 12px;
+            padding: 12px 15px; font-size: 12px; color: #77656b; margin-top: 5px;
+        }
+        .inclusion-item { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+        .inclusion-item::before { content: "🎀"; font-size: 10px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        @media(max-width:480px){ .form-row { grid-template-columns: 1fr; } }
+
+        .order-summary-block {
+            background: #fff9fa; border-radius: 16px; padding: 16px; margin-top: 20px;
+            border: 1px dashed var(--primary-pink);
+        }
+        
+        .promo-row { display: flex; gap: 10px; margin: 10px 0; }
+        .promo-input-clean {
+            padding: 8px 12px; border-radius: 10px; border: 1px solid #ffe4e9; font-size: 13px; flex-grow: 1;
+        }
+        .btn-promo-clean {
+            padding: 8px 16px; border-radius: 10px; background: #5c4b51; color: white;
+            border: none; font-size: 12px; font-weight: 700; cursor: pointer;
+        }
+
+        .qr-gallery-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;
+        }
+        @media(max-width: 480px) { .qr-gallery-grid { grid-template-columns: 1fr; } }
+
+        .qr-payment-card {
+            border-radius: 16px; padding: 15px; text-align: center; background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center;
+        }
+        .qr-payment-card.bpi-red { border: 2px solid #dc2626; background: #fef2f2; }
+        .qr-payment-card.maya-green { border: 2px solid #10b981; background: #f0fdf4; }
+
+        .qr-image-frame {
+            width: 100%; max-width: 200px; height: auto; margin: 10px 0; background: #fff; border-radius: 8px;
+            border: 1px solid #eee; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        .qr-image-frame img { width: 100%; height: auto; display: block; object-fit: contain; }
+
+        .qr-badge-logo {
+            font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; color: white; margin-bottom: 5px;
+        }
+        .bpi-red .qr-badge-logo { background: #dc2626; }
+        .maya-green .qr-badge-logo { background: #10b981; }
+
+        .upload-dropzone {
+            border: 2px dashed var(--accent-pink); background: #fff9fa; border-radius: 14px;
+            padding: 20px; text-align: center; cursor: pointer; margin-top: 12px; transition: all 0.2s;
+        }
+        .upload-dropzone:hover { background: #fff0f2; }
+        .upload-hidden-input { display: none; }
+        
+        .upload-preview-img {
+            max-width: 100px; max-height: 120px; object-fit: contain; border-radius: 6px;
+            margin-top: 10px; display: none; border: 1px solid var(--primary-pink);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="banner-container">
+        <img src="cutey.png" alt="Banner" class="banner-image">
+    </div>
+
+    <div class="card profile-grid">
+        <div><label>Name 💖</label><input type="text" id="userName"></div>
+        <div><label>Age 🎂</label><input type="number" id="userAge"></div>
+        <div><label>Start Date ✨</label><input type="date" id="startDate"></div>
+        <div><label>Send To Email 📧</label><input type="email" id="targetEmail" placeholder="coach@example.com"></div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top: 0; color: var(--accent-pink);">🧮 Quick Peptide Calculator</h3>
+        <div class="calc-grid">
+            <div>
+                <label>Strength (mg):</label>
+                <input type="number" id="calcStrength" placeholder="e.g., 5" oninput="calculateDose()">
+            </div>
+            <div>
+                <label>Water (mL):</label>
+                <input type="number" id="calcWater" placeholder="e.g., 2" oninput="calculateDose()">
+            </div>
+            <div>
+                <label>Dose (mg):</label>
+                <input type="number" id="calcDose" placeholder="e.g., 2.5" oninput="calculateDose()">
+            </div>
+            <div>
+                <label>Doses Taken 💉:</label>
+                <input type="number" id="calcTaken" value="0" min="0" placeholder="e.g., 1" oninput="calculateDose()">
+            </div>
+        </div>
+        <div class="calc-results">
+            <h4 style="margin: 0 0 10px 0; color: var(--text-color);">Show:</h4>
+            <p>Draw syringe to (use 1 ml or units): <span id="resUnits" style="color: var(--accent-pink); font-size: 18px;">0</span> units (<span id="resMl">0</span> mL)</p>
+            <p>Vial total starting doses: <span id="resTotalDoses" style="color: var(--text-color);">0</span></p>
+            <p style="font-size: 17px;">Vial contains: <span id="resDoses" style="color: var(--accent-pink); font-size: 22px; font-weight: 700;">0</span> remaining doses left ✨</p>
+            
+            <div id="replenishAlert" class="replenish-alert">
+                ✨ Oopsy! Only <span id="alertDoseCount">0</span> doses left! Time to replenish your magical peptide soon, bestie! 🎀 Let's keep that glow going! 💕
+            </div>
+        </div>
+    </div>
+
+    <div id="journal-container"></div>
+
+    <div class="controls">
+        <button class="btn-main" onclick="addNewWeek()">➕ Add Week</button>
+        <button class="btn-main btn-save" onclick="saveData()">💾 Save Progress</button>
+        <button class="btn-main btn-view" onclick="viewSummary()">👁️ View Summary</button>
+        <button class="btn-main" style="background:#8b5cf6;" onclick="emailProgress()">📧 Send to Email</button>
+        <button class="btn-main btn-clear" onclick="clearData()">🗑️ Clear All</button>
+    </div>
+</div>
+
+<div class="sticky-footer">
+    <a onclick="openMediaModal('How.png', 'How To Reconstitute')" class="footer-link">
+        <span class="link-icon">🐶🐱</span>Reconstitution
+    </a>
+    <a href="https://cellgenic.com/peptide-calculator/" target="_blank" class="footer-link">
+        <span class="link-icon">🐕🐈</span>Calculator
+    </a>
+    <a onclick="openMediaModal('Tirze.png', 'Tirzepatide Info Reference')" class="footer-link">
+        <span class="link-icon">🐩🐈‍⬛</span>Tirzepatide Info
+    </a>
+    <a onclick="openMediaModal('Sitechart.png', 'Peptide Injection Site Chart')" class="footer-link">
+        <span class="link-icon">🎀🐶🐱</span>Site Chart
+    </a>
+    <a onclick="openMediaModal('glowfactors.jpeg', 'Other Factors Affecting My Glow')" class="footer-link">
+        <span class="link-icon">✨🐱🐕</span>My Glow
+    </a>
+    <a onclick="openShopModal()" class="footer-link" style="border: 2px solid var(--accent-pink); background: #fff0f2; box-shadow: 0 2px 6px rgba(255,133,162,0.2);">
+        <span class="link-icon">🐕‍🦺🐈🛒</span><b>Boutique Shop</b>
+    </a>
+    <a onclick="openMediaModal('FAQS.png', 'Frequently Asked Questions')" class="footer-link">
+        <span class="link-icon">🐱🐶</span>FAQs
+    </a>
+</div>
+
+<div id="modalOverlay" onclick="closeModal()"></div>
+
+<div id="viewModal">
+    <h2 style="color:var(--accent-pink)">Journal Summary</h2>
+    <div id="summaryContent"></div>
+    <button class="btn-main" style="margin-top: 15px;" onclick="closeModal()">Close</button>
+</div>
+
+<div id="mediaModal">
+    <h3 id="mediaModalTitle" style="color: var(--accent-pink); margin-top: 0; margin-bottom: 15px;">Resource View</h3>
+    <div><img id="mediaModalImg" src="" alt="Resource Image Graphic"></div>
+    <button class="btn-main" style="margin-top: 15px; background: #9ca3af;" onclick="closeModal()">Dismiss ✨</button>
+</div>
+
+<div id="shopModal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0; color:var(--text-color); font-weight:700; font-size:18px;">🛒 Ilovetteph + KPEPS Tirzepatide Sets</h3>
+        <button onclick="closeModal()" style="background:none; border:none; font-size:20px; cursor:pointer; color:#9ca3af;">✖</button>
+    </div>
+
+    <div class="shop-banner">
+        <img src="Shop.jpg" class="shop-banner-img" alt="Tirzepatide Menu Catalog">
+    </div>
+
+    <div class="step-section">
+        <h4 class="step-title"><span class="step-num">1</span>Is this your 1st complete set?</h4>
+        <div class="type-switcher">
+            <div id="btnTypeNew" class="switch-btn active" onclick="updateCustomerTier(true)">Yes, 1st Complete Set! ✨</div>
+            <div id="btnTypeReturning" class="switch-btn" onclick="updateCustomerTier(false)">No, I'm a Returning Bestie! 💖</div>
+        </div>
+    </div>
+
+    <div class="step-section">
+        <h4 class="step-title"><span class="step-num">2</span>Select Your Desired Dosage Set</h4>
+        
+        <div id="card15mg" class="choice-card selected" onclick="updateDosageMg(15)">
+            <div style="display:flex; align-items:center;">
+                <input type="radio" name="doseTier" id="rad15mg" class="choice-radio" checked>
+                <div>
+                    <strong style="font-size:14px; color:var(--text-color);">15 mg Complete Set Track</strong>
+                    <div style="font-size:11px; color:#888; margin-top:2px;">Complete sets with everything you need to stay on track!</div>
+                </div>
+            </div>
+            <span style="font-weight:700; color:var(--accent-pink); font-size:16px;" id="lblPrice15">₱1,899</span>
+        </div>
+
+        <div id="card30mg" class="choice-card" onclick="updateDosageMg(30)">
+            <div style="display:flex; align-items:center;">
+                <input type="radio" name="doseTier" id="rad30mg" class="choice-radio">
+                <div>
+                    <strong style="font-size:14px; color:var(--text-color);">30 mg Complete Set Track</strong>
+                    <div style="font-size:11px; color:#888; margin-top:2px;">Premium heavy concentration dosage multi-stack track.</div>
+                </div>
+            </div>
+            <span style="font-weight:700; color:var(--accent-pink); font-size:16px;" id="lblPrice30">₱2,399</span>
+        </div>
+
+        <div class="inclusions-box">
+            <div style="font-weight:700; margin-bottom:5px; color:var(--accent-pink);">Included in your box:</div>
+            <div id="inclusionsList">
+                <div class="inclusion-item">Tirzepatide Vial</div>
+                <div class="inclusion-item">Pharma Bac Water (30 mL)</div>
+                <div class="inclusion-item">Syringes for reconstitution and application</div>
+                <div class="inclusion-item">Alcohol Pad</div>
+                <div class="inclusion-item">Vial Cap Remover</div>
+                <div class="inclusion-item">Vial Cap Case (for storage)</div>
+                <div class="inclusion-item">I Love Teph KPEP Physical or Online Journal</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step-section">
+        <h4 class="step-title"><span class="step-num">3</span>Scan QR Code to Send Remittance</h4>
+        <div style="font-size:12px; color:#666; margin-bottom:10px;">Please select your desired channel and scan the corresponding QR to pay:</div>
+        
+        <div class="qr-gallery-grid">
+            <div class="qr-payment-card bpi-red">
+                <div class="qr-badge-logo">BPI</div>
+                <div style="font-size:11px; font-weight:700; color:#dc2626;">Miumiu</div>
+                <div class="qr-image-frame">
+                    <img src="BPI.png" alt="BPI QR Code (Miumiu)">
+                </div>
+            </div>
+
+            <div class="qr-payment-card maya-green">
+                <div class="qr-badge-logo">Maya</div>
+                <div style="font-size:11px; font-weight:700; color:#10b981;">m at the top</div>
+                <div class="qr-image-frame">
+                    <img src="MAYA.JPG" alt="Maya QR Code">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step-section" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
+        <h4 class="step-title"><span class="step-num">4</span>Shipping & Proof of Payment</h4>
+        <div class="form-row">
+            <input type="text" id="shopShipName" placeholder="Full Name">
+            <input type="email" id="shopShipEmail" placeholder="Email Address">
+        </div>
+        <input type="text" id="shopShipAddress" placeholder="Complete Delivery Address Block" style="margin-bottom:15px;">
+
+        <label>Select Delivery Mode: <span style="color:red;">*</span></label>
+        <div class="delivery-selection-grid">
+            <div id="btnCourierJT" class="courier-girly-btn active" onclick="updateGirlyCourier('J&T Express')">
+                <span class="courier-title">🚚 J&T Express</span>
+                <span class="courier-subnote">+₱200 shipping fee</span>
+            </div>
+            <div id="btnCourierLala" class="courier-girly-btn" onclick="updateGirlyCourier('Lalamove')">
+                <span class="courier-title">🛵 Lalamove</span>
+                <span class="courier-subnote">Paid by recipient 🎀</span>
+            </div>
+            <div id="btnCourierKyle" class="courier-girly-btn" onclick="updateGirlyCourier('Kyle Delivery')">
+                <span class="courier-title">✨ Kyle Delivery</span>
+                <span class="courier-subnote">Subject to Kyle's schedule ⏳</span>
+            </div>
+            <div id="btnCourierYna" class="courier-girly-btn" onclick="updateGirlyCourier('Yna Delivery')">
+                <span class="courier-title">🌸 Yna Delivery</span>
+                <span class="courier-subnote">Subject to Yna's schedule ⏳</span>
+            </div>
+        </div>
+
+        <label style="margin-top:15px;">Upload photo of proof of payment: <span style="color:red;">*</span></label>
+        <div class="upload-dropzone" onclick="document.getElementById('paymentFileSelector').click()">
+            <div style="font-size:24px; margin-bottom:5px;">📸</div>
+            <div style="font-size:13px; font-weight:700; color:var(--text-color);" id="lblUploadStatusText">Click here to choose receipt photo</div>
+            <div style="font-size:11px; color:#888; margin-top:4px;">Supports JPEG, PNG file formats</div>
+            <img id="imgPaymentPreview" class="upload-preview-img" alt="Uploaded receipt preview">
+        </div>
+        <input type="file" id="paymentFileSelector" class="upload-hidden-input" accept="image/*" onchange="handlePaymentFileSelection(this)">
+        
+        <div style="background:#fff1f2; border:1px solid #fca5a5; padding:10px; border-radius:10px; margin-top:10px; font-size:11px; color:#b91c1c; font-weight:600; line-height:1.4;">
+            ⚠️ <b>Note:</b> Do not accept if it is edited by human or AI. All submitted proof files are audited rigorously before fulfilment. Orders with missing screenshots cannot be confirmed.
+        </div>
+
+        <div class="order-summary-block">
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:#666; margin-bottom:6px;">
+                <span>Selected Set Inclusions Subtotal:</span>
+                <span id="lblSummaryBase">₱1,899</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:#10b981; margin-bottom:6px; display:none;" id="shopReturnDiscountRow">
+                <span>Returning Bestie Cost-Savings Applied:</span>
+                <span>-₱200</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:#dc2626; margin-bottom:6px; display:none;" id="shopPromoDiscountRow">
+                <span>Extra Bestie Promo Adjustment (20%):</span>
+                <span id="lblPromoSavings">-₱0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:#6b5a60; margin-bottom:6px;" id="shopShippingRow">
+                <span>Courier Add-on Price (J&T Express):</span>
+                <span id="lblSummaryShipping">₱200</span>
+            </div>
+            
+            <div class="promo-row">
+                <input type="text" id="shopPromoInput" class="promo-input-clean" placeholder="Coupon Code (try GLOW20)">
+                <button class="btn-promo-clean" onclick="validatePromoCodeKey()">Apply</button>
+            </div>
+            <div id="shopPromoMsg" style="font-size:11px; margin-bottom:8px; font-weight:600;"></div>
+
+            <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:700; color:var(--text-color); border-top:1px solid #ffd1dc; padding-top:10px;">
+                <span>Total Calculated Amount:</span>
+                <span id="lblSummaryTotal" style="color:var(--accent-pink); font-size:20px;">₱2,099</span>
+            </div>
+        </div>
+        
+        <button id="btnCompleteCheckout" class="btn-main" style="width:100%; margin-top:20px; border-radius:14px; padding:14px; font-size:14px;" onclick="compileAndDispatchOrder()">Complete Purchase Checkout 💳</button>
+    </div>
+</div>
+
+<template id="peptide-template">
+    <div class="peptide-entry">
+        <div style="display:flex; justify-content:space-between;">
+            <h4 class="p-stack-title" style="margin:0; color:var(--accent-pink);">Peptide Stack for Week</h4>
+            <button onclick="this.parentElement.parentElement.remove()" style="color:red; background:none; border:none; cursor:pointer;">✖</button>
+        </div>
+        <div class="profile-grid" style="margin-top:10px;">
+            <input type="text" class="p-name" placeholder="Peptide Name">
+            <input type="text" class="p-dose" placeholder="Dosage">
+            <select class="p-for">
+                <option>Weight management</option>
+                <option>Appetite Suppression</option>
+                <option>Beauty</option>
+                <option>Strength</option>
+                <option>Fat melters</option>
+            </select>
+            <input type="text" class="p-site" placeholder="Injection Site">
+            <input type="text" class="p-freq" placeholder="Frequency">
+        </div>
+        <div style="margin-top:10px;">
+            <label>Days Selected:</label>
+            <div class="days-row">
+                <button class="btn-day" onclick="this.classList.toggle('active')">Mon</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Tue</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Wed</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Thu</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Fri</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Sat</button>
+                <button class="btn-day" onclick="this.classList.toggle('active')">Sun</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    
+    let checkoutProfileState = {
+        isFirstSet: true,
+        dosageMg: 15,
+        promoDiscountMultiplier: 0.0,
+        deliveryOption: "J&T Express",
+        shippingFee: 200,
+        uploadedReceiptName: "" 
+    };
+
+    function handlePaymentFileSelection(input) {
+        const textLabel = document.getElementById('lblUploadStatusText');
+        const previewImg = document.getElementById('imgPaymentPreview');
+        
+        if(input.files && input.files[0]) {
+            const currentFile = input.files[0];
+            checkoutProfileState.uploadedReceiptName = currentFile.name;
+            textLabel.innerText = `📄 Added: ${currentFile.name}`;
+            textLabel.style.color = "#10b981";
+
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.style.display = "inline-block";
+            };
+            fileReader.readAsDataURL(currentFile);
+        } else {
+            checkoutProfileState.uploadedReceiptName = "";
+            textLabel.innerText = "Click here to choose receipt photo";
+            textLabel.style.color = "var(--text-color)";
+            previewImg.style.display = "none";
+        }
+    }
+
+    function updateGirlyCourier(option) {
+        checkoutProfileState.deliveryOption = option;
+        
+        document.getElementById('btnCourierJT').classList.remove('active');
+        document.getElementById('btnCourierLala').classList.remove('active');
+        document.getElementById('btnCourierKyle').classList.remove('active');
+        document.getElementById('btnCourierYna').classList.remove('active');
+
+        if(option === 'J&T Express') {
+            document.getElementById('btnCourierJT').classList.add('active');
+            checkoutProfileState.shippingFee = 200;
+        } else {
+            checkoutProfileState.shippingFee = 0;
+            if(option === 'Lalamove') {
+                document.getElementById('btnCourierLala').classList.add('active');
+            } else if(option === 'Kyle Delivery') {
+                document.getElementById('btnCourierKyle').classList.add('active');
+            } else if(option === 'Yna Delivery') {
+                document.getElementById('btnCourierYna').classList.add('active');
+            }
+        }
+        recalculateOrderValues();
+    }
+
+    function calculateDose() {
+        const strength = parseFloat(document.getElementById('calcStrength').value);
+        const water = parseFloat(document.getElementById('calcWater').value);
+        const dose = parseFloat(document.getElementById('calcDose').value);
+        let taken = parseFloat(document.getElementById('calcTaken').value);
+        if (isNaN(taken) || taken < 0) taken = 0;
+
+        const resUnits = document.getElementById('resUnits');
+        const resMl = document.getElementById('resMl');
+        const resTotalDoses = document.getElementById('resTotalDoses');
+        const resDoses = document.getElementById('resDoses');
+        const replenishAlert = document.getElementById('replenishAlert');
+        const alertDoseCount = document.getElementById('alertDoseCount');
+
+        if (strength > 0 && water > 0 && dose > 0) {
+            const volumeMl = (dose / strength) * water;
+            const units = volumeMl * 100;
+            const maxDosesFromVial = strength / dose;
+            const remainingDoses = Math.max(0, maxDosesFromVial - taken);
+
+            resUnits.innerText = units.toFixed(1).replace(/\.0$/, '');
+            resMl.innerText = volumeMl.toFixed(3).replace(/\.?0+$/, '');
+            resTotalDoses.innerText = maxDosesFromVial.toFixed(1).replace(/\.0$/, '');
+            
+            const displayRemaining = remainingDoses.toFixed(1).replace(/\.0$/, '');
+            resDoses.innerText = displayRemaining;
+
+            if (remainingDoses < 3.0) {
+                alertDoseCount.innerText = displayRemaining;
+                replenishAlert.style.display = "block";
+            } else {
+                replenishAlert.style.display = "none";
+            }
+        } else {
+            resUnits.innerText = "0";
+            resMl.innerText = "0";
+            resTotalDoses.innerText = "0";
+            resDoses.innerText = "0";
+            replenishAlert.style.display = "none";
+        }
+    }
+
+    function addNewWeek(savedData = null) {
+        const container = document.getElementById('journal-container');
+        const weekNum = container.children.length + 1;
+        const weekCard = document.createElement('div');
+        weekCard.className = 'card week-card';
+        weekCard.innerHTML = `
+            <h3>Week ${weekNum} 🌸</h3>
+            <div class="peptides-stack"></div>
+            <button class="btn-add-peptide" onclick="addPeptide(this.previousElementSibling, null, ${weekNum})">➕ Add Peptide to Stack</button>
+            <div class="weight-grid">
+                <div><label>Start</label><input type="number" class="w-start"></div>
+                <div><label>Goal</label><input type="number" class="w-goal"></div>
+                <div><label>End</label><input type="number" class="w-end"></div>
+            </div>
+            <textarea class="w-notes" placeholder="Notes..."></textarea>
+        `;
+        container.appendChild(weekCard);
+        
+        const currentStack = weekCard.querySelector('.peptides-stack');
+
+        if (savedData) {
+            weekCard.querySelector('.w-start').value = savedData.startWt || "";
+            weekCard.querySelector('.w-goal').value = savedData.goalWt || "";
+            weekCard.querySelector('.w-end').value = savedData.endWt || "";
+            weekCard.querySelector('.w-notes').value = savedData.notes || "";
+            if (savedData.peptides && savedData.peptides.length > 0) {
+                savedData.peptides.forEach(p => addPeptide(currentStack, p, weekNum));
+            } else {
+                addPeptide(currentStack, null, weekNum);
+            }
+        } else {
+            addPeptide(currentStack, null, weekNum);
+        }
+    }
+
+    function addPeptide(stack, data = null, weekNum = 1) {
+        const temp = document.getElementById('peptide-template');
+        const clone = temp.content.cloneNode(true);
+        const div = clone.querySelector('.peptide-entry');
+        
+        const titleEl = div.querySelector('.p-stack-title');
+        if (titleEl) {
+            titleEl.innerText = `Peptide Stack for Week ${weekNum} 🌸`;
+        }
+
+        if (data) {
+            div.querySelector('.p-name').value = data.name || "";
+            div.querySelector('.p-dose').value = data.dose || "";
+            div.querySelector('.p-for').value = data.for || "Weight management";
+            div.querySelector('.p-site').value = data.site || "";
+            div.querySelector('.p-freq').value = data.freq || "";
+            
+            const buttons = div.querySelectorAll('.btn-day');
+            buttons.forEach(btn => {
+                if (data.activeDays && data.activeDays.split(', ').includes(btn.innerText.trim())) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        stack.appendChild(clone);
+    }
+
+    function collectData() {
+        const journal = {
+            profile: {
+                name: document.getElementById('userName').value,
+                age: document.getElementById('userAge').value,
+                start: document.getElementById('startDate').value,
+                target: document.getElementById('targetEmail').value
+            },
+            calculator: {
+                strength: document.getElementById('calcStrength').value,
+                water: document.getElementById('calcWater').value,
+                dose: document.getElementById('calcDose').value,
+                taken: document.getElementById('calcTaken').value
+            },
+            weeks: []
+        };
+        
+        document.querySelectorAll('.week-card').forEach((card, index) => {
+            const week = {
+                num: index + 1,
+                startWt: card.querySelector('.w-start').value,
+                goalWt: card.querySelector('.w-goal').value,
+                endWt: card.querySelector('.w-end').value,
+                notes: card.querySelector('.w-notes').value,
+                peptides: []
+            };
+            
+            card.querySelectorAll('.peptide-entry').forEach(p => {
+                const days = Array.from(p.querySelectorAll('.btn-day')).map(b => b.classList.contains('active'));
+                week.peptides.push({
+                    name: p.querySelector('.p-name').value,
+                    dose: p.querySelector('.p-dose').value,
+                    for: p.querySelector('.p-for').value,
+                    site: p.querySelector('.p-site').value,
+                    freq: p.querySelector('.p-freq').value,
+                    activeDays: dayNames.filter((d, i) => days[i]).join(", ")
+                });
+            });
+            journal.weeks.push(week);
+        });
+        return journal;
+    }
+
+    function saveData() {
+        localStorage.setItem('peptideJournalData', JSON.stringify(collectData()));
+        alert("Progress saved! ✨");
+    }
+
+    function viewSummary() {
+        const data = collectData();
+        let html = `<p><strong>Name:</strong> ${data.profile.name || 'N/A'} | <strong>Start:</strong> ${data.profile.start || 'N/A'}</p>`;
+        data.weeks.forEach(w => {
+            html += `<hr><h4>Week ${w.num}</h4><p>Weight: ${w.startWt || '0'} -> ${w.endWt || '0'}</p>`;
+            w.peptides.forEach(p => {
+                html += `<p>🌸 <strong>${p.name || 'Unnamed'}</strong> (${p.dose || 'No dose'}) - For: ${p.for}<br><small>Days: ${p.activeDays || 'None'}</small></p>`;
+            });
+            html += `<p><em>Notes: ${w.notes || 'None'}</em></p>`;
+        });
+        document.getElementById('summaryContent').innerHTML = html;
+        document.getElementById('viewModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    function openShopModal() {
+        document.getElementById('shopShipName').value = document.getElementById('userName').value;
+        document.getElementById('shopShipEmail').value = document.getElementById('targetEmail').value;
+        
+        document.getElementById('shopModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+        recalculateOrderValues();
+    }
+
+    function updateCustomerTier(isFirst) {
+        checkoutProfileState.isFirstSet = isFirst;
+        
+        const btnNew = document.getElementById('btnTypeNew');
+        const btnReturn = document.getElementById('btnTypeReturning');
+        const inclusionsList = document.getElementById('inclusionsList');
+
+        if(isFirst) {
+            btnNew.classList.add('active');
+            btnReturn.classList.remove('active');
+            
+            inclusionsList.innerHTML = `
+                <div class="inclusion-item">Tirzepatide Vial</div>
+                <div class="inclusion-item">Pharma Bac Water (30 mL)</div>
+                <div class="inclusion-item">Syringes for reconstitution and application</div>
+                <div class="inclusion-item">Alcohol Pad</div>
+                <div class="inclusion-item">Vial Cap Remover</div>
+                <div class="inclusion-item">Vial Cap Case (for storage)</div>
+                <div class="inclusion-item">I Love Teph KPEP Physical or Online Journal</div>
+            `;
+        } else {
+            btnReturn.classList.add('active');
+            btnNew.classList.remove('active');
+            
+            inclusionsList.innerHTML = `
+                <div class="inclusion-item">Tirzepatide Vial</div>
+                <div class="inclusion-item">Pharma Bac Water (30 mL)</div>
+                <div class="inclusion-item">Syringes for reconstitution and application</div>
+                <div class="inclusion-item">Alcohol Pad</div>
+                <div class="inclusion-item" style="color:var(--accent-pink); font-weight:600;">Same Potency. Same Results. Just More Savings! 💕</div>
+            `;
+        }
+        recalculateOrderValues();
+    }
+
+    function updateDosageMg(mg) {
+        checkoutProfileState.dosageMg = mg;
+        const rad15 = document.getElementById('rad15mg');
+        const rad30 = document.getElementById('rad30mg');
+        const card15 = document.getElementById('card15mg');
+        const card30 = document.getElementById('card30mg');
+
+        if(mg === 15) {
+            rad15.checked = true;
+            rad30.checked = false;
+            card15.classList.add('selected');
+            card30.classList.remove('selected');
+        } else {
+            rad30.checked = true;
+            rad15.checked = false;
+            card30.classList.add('selected');
+            card15.classList.remove('selected');
+        }
+        recalculateOrderValues();
+    }
+
+    function validatePromoCodeKey() {
+        const inputStr = document.getElementById('shopPromoInput').value.trim().toUpperCase();
+        const feedbackMsg = document.getElementById('shopPromoMsg');
+
+        if(inputStr === "GLOW20") {
+            checkoutProfileState.promoDiscountMultiplier = 0.20;
+            feedbackMsg.innerText = "✨ Awesome! Extra 20% Bestie Coupon Applied! 💕";
+            feedbackMsg.style.color = "#10b981";
+        } else if(inputStr === "") {
+            checkoutProfileState.promoDiscountMultiplier = 0.0;
+            feedbackMsg.innerText = "";
+        } else {
+            checkoutProfileState.promoDiscountMultiplier = 0.0;
+            feedbackMsg.innerText = "✖ Unknown code structure, please verify code string layout! 🎀";
+            feedbackMsg.style.color = "#ef4444";
+        }
+        recalculateOrderValues();
+    }
+
+    function recalculateOrderValues() {
+        let baseCost = 0;
+        
+        if(checkoutProfileState.dosageMg === 15) {
+            baseCost = checkoutProfileState.isFirstSet ? 1899 : 1699;
+        } else {
+            baseCost = checkoutProfileState.isFirstSet ? 2399 : 2199;
+        }
+
+        document.getElementById('lblPrice15').innerText = checkoutProfileState.isFirstSet ? "₱1,899" : "₱1,699";
+        document.getElementById('lblPrice30').innerText = checkoutProfileState.isFirstSet ? "₱2,399" : "₱2,199";
+        document.getElementById('lblSummaryBase').innerText = `₱${baseCost.toLocaleString()}`;
+
+        document.getElementById('shopReturnDiscountRow').style.display = !checkoutProfileState.isFirstSet ? "flex" : "none";
+
+        let bonusSavings = Math.round(baseCost * checkoutProfileState.promoDiscountMultiplier);
+        
+        const shippingLabel = document.getElementById('lblSummaryShipping');
+        const shippingRow = document.getElementById('shopShippingRow');
+        
+        if(checkoutProfileState.shippingFee > 0) {
+            shippingRow.style.display = "flex";
+            shippingLabel.innerText = `₱${checkoutProfileState.shippingFee}`;
+        } else {
+            shippingRow.style.display = "flex";
+            if(checkoutProfileState.deliveryOption === 'Lalamove') {
+                shippingLabel.innerText = "By Recipient 🛵";
+            } else {
+                shippingLabel.innerText = "Sched Pending ⏳";
+            }
+        }
+
+        let absoluteNetTotal = baseCost - bonusSavings + checkoutProfileState.shippingFee;
+
+        document.getElementById('lblPromoSavings').innerText = `-₱${bonusSavings.toLocaleString()}`;
+        document.getElementById('shopPromoDiscountRow').style.display = bonusSavings > 0 ? "flex" : "none";
+        
+        document.getElementById('lblSummaryTotal').innerText = `₱${absoluteNetTotal.toLocaleString()}`;
+    }
+
+    // 🎀 AUTOMATED SENDER BACKEND SERVICE ROUTING PIPELINE
+    function compileAndDispatchOrder() {
+        const nameKey = document.getElementById('shopShipName').value.trim();
+        const mailKey = document.getElementById('shopShipEmail').value.trim();
+        const addressKey = document.getElementById('shopShipAddress').value.trim();
+        const checkoutButton = document.getElementById('btnCompleteCheckout');
+
+        if(!nameKey || !mailKey || !addressKey) {
+            alert("Please input your Name, Email, and Delivery Address to check out, bestie! 💖");
+            return;
+        }
+
+        if(!checkoutProfileState.uploadedReceiptName) {
+            alert("❌ Order Confirmation Blocked: Please upload your Proof of Payment screenshot first before submitting your order! 💕");
+            return;
+        }
+
+        let baseCost = checkoutProfileState.dosageMg === 15 ? (checkoutProfileState.isFirstSet ? 1899 : 1699) : (checkoutProfileState.isFirstSet ? 2399 : 2199);
+        let bonusSavings = Math.round(baseCost * checkoutProfileState.promoDiscountMultiplier);
+        let absoluteNetTotal = baseCost - bonusSavings + checkoutProfileState.shippingFee;
+
+        // 📝 Manifest Setup intended for yhnawork@icloud.com
+        let manifestDataLog = `--- NEW PEPTIDE SHOP ORDER MANIFEST ---\n`;
+        manifestDataLog += `Customer Name: ${nameKey}\n`;
+        manifestDataLog += `Customer Email: ${mailKey}\n`;
+        manifestDataLog += `Shipping Address: ${addressKey}\n`;
+        manifestDataLog += `Logistics Courier: ${checkoutProfileState.deliveryOption}\n`;
+        manifestDataLog += `Product Order Variant: ${checkoutProfileState.dosageMg} mg Tirzepatide Set\n`;
+        manifestDataLog += `Tier Variant Status: ${checkoutProfileState.isFirstSet ? "First-time Box Inclusions Pack" : "Returning Customer Pack"}\n`;
+        manifestDataLog += `Uploaded Proof Reference: ${checkoutProfileState.uploadedReceiptName}\n`;
+        manifestDataLog += `Total Amount Settled: ₱${absoluteNetTotal.toLocaleString()}\n`;
+
+        // ✨ Cute customized message thanking the customer
+        let sweetCustomerThankYouMessage = `Hi gorgeous bestie, ${nameKey}! 🌸✨\n\n`;
+        sweetCustomerThankYouMessage += `Oh my gosh, thank you so, so much for shopping with us! We are absolutely thrilled to be a small part of your beautiful transformation path. Investing in your wellness, body health, and inner brightness is the ultimate form of self-love, and you deserve all the magic! 🎀💕\n\n`;
+        sweetCustomerThankYouMessage += `We have successfully received your registration data and payment screenshot for your magical ${checkoutProfileState.dosageMg}mg Tirzepatide Set! Our team is already carefully checking the details to prepare your luxury box of goodies. 🎉\n\n`;
+        sweetCustomerThankYouMessage += `🛒 ORDER DETAILS SUMMARY:\n`;
+        sweetCustomerThankYouMessage += `• Delivery Option Selected: ${checkoutProfileState.deliveryOption}\n`;
+        sweetCustomerThankYouMessage += `• Total Settled Balance: ₱${absoluteNetTotal.toLocaleString()}\n`;
+        sweetCustomerThankYouMessage += `• Shipping Target Destination: ${addressKey}\n\n`;
+        sweetCustomerThankYouMessage += `Please keep logging your metrics in your interactive Peptide Journal tracking space to watch your steady progress shine through week over week! 🧮📈\n\n`;
+        sweetCustomerThankYouMessage += `If you have any quick questions about your box shipment or reconstitution setup steps, simply message us back anytime. Stay glowing, radiant, and absolutely fabulous! 💖🌟\n\n`;
+        sweetCustomerThankYouMessage += `With infinite love and sparkles,\n`;
+        sweetCustomerThankYouMessage += `Your Ultimate Glow Squad 🌸✨`;
+
+        // UI processing response animation updates
+        checkoutButton.innerText = "Processing Your Order... ⏳💖";
+        checkoutButton.disabled = true;
+
+        // Configuration arguments map to EmailJS template definitions variables
+        let emailPayloadParams = {
+            admin_target_email: "yhnawork@icloud.com",
+            customer_email: mailKey,
+            customer_name: nameKey,
+            order_manifest_body: manifestDataLog,
+            customer_thankyou_body: sweetCustomerThankYouMessage
+        };
+
+        // Live transactional request execution block
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailPayloadParams)
+            .then(function(response) {
+                alert(`✨ Hurrah, bestie! Your order was successfully placed!\n\n1. The order manifest has been securely dispatched to our fulfillment team.\n2. A cute, personalized confirmation email has been sent to ${mailKey}. 💕`);
+                checkoutButton.innerText = "Complete Purchase Checkout 💳";
+                checkoutButton.disabled = false;
+                closeModal();
+            }, function(error) {
+                console.error("EmailJS Transaction Failure Logging:", error);
+                alert("Oopsy! Something went wrong while saving your order routing requests. Please try again in a few moments, bestie! 🎀");
+                checkoutButton.innerText = "Complete Purchase Checkout 💳";
+                checkoutButton.disabled = false;
+            });
+    }
+
+    function openMediaModal(imgSrc, titleText) {
+        document.getElementById('mediaModalTitle').innerText = titleText;
+        document.getElementById('mediaModalImg').src = imgSrc;
+        document.getElementById('mediaModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    function emailProgress() {
+        const data = collectData();
+        const email = data.profile.target || "";
+        const subject = `Peptide Journal Progress - ${data.profile.name || 'Update'}`;
+        let body = `Hello! Here is my progress update:\n\n`;
+        body += `Name: ${data.profile.name}\nStart Date: ${data.profile.start}\n\n`;
+        data.weeks.forEach(w => {
+            body += `--- WEEK ${w.num} ---\nWeight: ${w.startWt} to ${w.endWt}\n`;
+            w.peptides.forEach(p => { body += `- ${p.name} | Dose: ${p.dose} | Days: ${p.activeDays}\n`; });
+            body += `Notes: ${w.notes}\n\n`;
+        });
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function closeModal() {
+        document.getElementById('viewModal').style.display = 'none';
+        document.getElementById('mediaModal').style.display = 'none';
+        document.getElementById('shopModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function loadData() {
+        const raw = localStorage.getItem('peptideJournalData');
+        if (!raw) { 
+            addNewWeek(); 
+            return; 
+        }
+        try {
+            const data = JSON.parse(raw);
+            document.getElementById('userName').value = data.profile.name || "";
+            document.getElementById('userAge').value = data.profile.age || "";
+            document.getElementById('startDate').value = data.profile.start || "";
+            document.getElementById('targetEmail').value = data.profile.target || "";
+            
+            if (data.calculator) {
+                document.getElementById('calcStrength').value = data.calculator.strength || "";
+                document.getElementById('calcWater').value = data.calculator.water || "";
+                document.getElementById('calcDose').value = data.calculator.dose || "";
+                document.getElementById('calcTaken').value = data.calculator.taken || "0";
+                calculateDose();
+            }
+
+            if (data.weeks && data.weeks.length > 0) {
+                document.getElementById('journal-container').innerHTML = "";
+                data.weeks.forEach(w => addNewWeek(w));
+            } else {
+                addNewWeek();
+            }
+        } catch(e) {
+            console.error("Error loading stored data, creating fresh layout.", e);
+            addNewWeek();
+        }
+    }
+
+    function clearData() { 
+        if(confirm("Clear everything? This will wipe your history permanently.")) { 
+            localStorage.removeItem('peptideJournalData'); 
+            location.reload(); 
+        } 
+    }
+
+    window.onload = loadData;
+</script>
+
+</body>
+</html>
