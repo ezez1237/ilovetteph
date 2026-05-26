@@ -14,9 +14,7 @@
         const EMAILJS_TEMPLATE_ID = "template_i263408"; 
 
         (function() {
-            if (EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
-                emailjs.init(EMAILJS_PUBLIC_KEY);
-            }
+            emailjs.init("jnZH0vBpR7dvUDt9X");
         })();
     </script>
 
@@ -114,9 +112,9 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); box-shadow: 0 4px 12px rgba(255, 133, 162, 0.3); }
-            100% { transform: scale(1); }
+            0+f { transform: scale(1); }
+            50+f { transform: scale(1.01); box-shadow: 0 4px 12px rgba(255, 133, 162, 0.3); }
+            100+f { transform: scale(1); }
         }
 
         label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--accent-pink); }
@@ -278,11 +276,11 @@
 
         /* --- BOUTIQUE DESIGN STYLES --- */
         .shop-banner {
-            width: 100%; height: auto; border-radius: 16px; overflow: hidden; margin-bottom: 20px;
+            width: 100%; border-radius: 16px; overflow: hidden; margin-bottom: 20px;
             position: relative; border: 1px solid #ffe4e9;
         }
         .shop-banner-img {
-            width: 100%; height:auto; display: block;};
+            width: 100%; height:auto; object-fit: display: block;
         }
 
         .step-section {
@@ -351,15 +349,6 @@
         .order-summary-block {
             background: #fff9fa; border-radius: 16px; padding: 16px; margin-top: 20px;
             border: 1px dashed var(--primary-pink);
-        }
-        
-        .promo-row { display: flex; gap: 10px; margin: 10px 0; }
-        .promo-input-clean {
-            padding: 8px 12px; border-radius: 10px; border: 1px solid #ffe4e9; font-size: 13px; flex-grow: 1;
-        }
-        .btn-promo-clean {
-            padding: 8px 16px; border-radius: 10px; background: #5c4b51; color: white;
-            border: none; font-size: 12px; font-weight: 700; cursor: pointer;
         }
 
         .qr-gallery-grid {
@@ -458,25 +447,25 @@
 </div>
 
 <div class="sticky-footer">
-    <a onclick="openMediaModal('How.png', 'How To Reconstitute')" class="footer-link">
+    <a onclick="openMediaModal('How.PNG', 'How To Reconstitute')" class="footer-link">
         <span class="link-icon">🐶🐱</span>Reconstitution
     </a>
     <a href="https://cellgenic.com/peptide-calculator/" target="_blank" class="footer-link">
         <span class="link-icon">🐕🐈</span>Calculator
     </a>
-    <a onclick="openMediaModal('Tirze.png', 'Tirzepatide Info Reference')" class="footer-link">
+    <a onclick="openMediaModal('Tirze.PNG', 'Tirzepatide Info Reference')" class="footer-link">
         <span class="link-icon">🐩🐈‍⬛</span>Tirzepatide Info
     </a>
-    <a onclick="openMediaModal('Sitechart.png', 'Peptide Injection Site Chart')" class="footer-link">
+    <a onclick="openMediaModal('SiteChart.png', 'Peptide Injection Site Chart')" class="footer-link">
         <span class="link-icon">🎀🐶🐱</span>Site Chart
     </a>
-    <a onclick="openMediaModal('glowfactors.jpeg', 'Other Factors Affecting My Glow')" class="footer-link">
+    <a onclick="openMediaModal('GlowFactors.png', 'Other Factors Affecting My Glow')" class="footer-link">
         <span class="link-icon">✨🐱🐕</span>My Glow
     </a>
     <a onclick="openShopModal()" class="footer-link" style="border: 2px solid var(--accent-pink); background: #fff0f2; box-shadow: 0 2px 6px rgba(255,133,162,0.2);">
         <span class="link-icon">🐕‍🦺🐈🛒</span><b>Boutique Shop</b>
     </a>
-    <a onclick="openMediaModal('FAQS.png', 'Frequently Asked Questions')" class="footer-link">
+    <a onclick="openMediaModal('FAQS.PNG', 'Frequently Asked Questions')" class="footer-link">
         <span class="link-icon">🐱🐶</span>FAQs
     </a>
 </div>
@@ -593,9 +582,9 @@
                 <span class="courier-title">🛵 Lalamove</span>
                 <span class="courier-subnote">Paid by recipient 🎀</span>
             </div>
-            <div id="btnCourierKyle" class="courier-girly-btn" onclick="updateGirlyCourier('Kyle Delivery')">
-                <span class="courier-title">✨ Kyle Delivery</span>
-                <span class="courier-subnote">Subject to Kyle's schedule ⏳</span>
+            <div id="btnCourierKay" class="courier-girly-btn" onclick="updateGirlyCourier('Kay Delivery')">
+                <span class="courier-title">✨ Kay Delivery</span>
+                <span class="courier-subnote">Subject to Kay's schedule ⏳</span>
             </div>
             <div id="btnCourierYna" class="courier-girly-btn" onclick="updateGirlyCourier('Yna Delivery')">
                 <span class="courier-title">🌸 Yna Delivery</span>
@@ -625,20 +614,10 @@
                 <span>Returning Bestie Cost-Savings Applied:</span>
                 <span>-₱200</span>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:13px; color:#dc2626; margin-bottom:6px; display:none;" id="shopPromoDiscountRow">
-                <span>Extra Bestie Promo Adjustment (20%):</span>
-                <span id="lblPromoSavings">-₱0</span>
-            </div>
             <div style="display:flex; justify-content:space-between; font-size:13px; color:#6b5a60; margin-bottom:6px;" id="shopShippingRow">
                 <span>Courier Add-on Price (J&T Express):</span>
                 <span id="lblSummaryShipping">₱200</span>
             </div>
-            
-            <div class="promo-row">
-                <input type="text" id="shopPromoInput" class="promo-input-clean" placeholder="Coupon Code (try GLOW20)">
-                <button class="btn-promo-clean" onclick="validatePromoCodeKey()">Apply</button>
-            </div>
-            <div id="shopPromoMsg" style="font-size:11px; margin-bottom:8px; font-weight:600;"></div>
 
             <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:700; color:var(--text-color); border-top:1px solid #ffd1dc; padding-top:10px;">
                 <span>Total Calculated Amount:</span>
@@ -690,7 +669,6 @@
     let checkoutProfileState = {
         isFirstSet: true,
         dosageMg: 15,
-        promoDiscountMultiplier: 0.0,
         deliveryOption: "J&T Express",
         shippingFee: 200,
         uploadedReceiptName: "" 
@@ -725,7 +703,7 @@
         
         document.getElementById('btnCourierJT').classList.remove('active');
         document.getElementById('btnCourierLala').classList.remove('active');
-        document.getElementById('btnCourierKyle').classList.remove('active');
+        document.getElementById('btnCourierKay').classList.remove('active');
         document.getElementById('btnCourierYna').classList.remove('active');
 
         if(option === 'J&T Express') {
@@ -735,8 +713,8 @@
             checkoutProfileState.shippingFee = 0;
             if(option === 'Lalamove') {
                 document.getElementById('btnCourierLala').classList.add('active');
-            } else if(option === 'Kyle Delivery') {
-                document.getElementById('btnCourierKyle').classList.add('active');
+            } else if(option === 'Kay Delivery') {
+                document.getElementById('btnCourierKay').classList.add('active');
             } else if(option === 'Yna Delivery') {
                 document.getElementById('btnCourierYna').classList.add('active');
             }
@@ -976,25 +954,6 @@
         recalculateOrderValues();
     }
 
-    function validatePromoCodeKey() {
-        const inputStr = document.getElementById('shopPromoInput').value.trim().toUpperCase();
-        const feedbackMsg = document.getElementById('shopPromoMsg');
-
-        if(inputStr === "GLOW20") {
-            checkoutProfileState.promoDiscountMultiplier = 0.20;
-            feedbackMsg.innerText = "✨ Awesome! Extra 20% Bestie Coupon Applied! 💕";
-            feedbackMsg.style.color = "#10b981";
-        } else if(inputStr === "") {
-            checkoutProfileState.promoDiscountMultiplier = 0.0;
-            feedbackMsg.innerText = "";
-        } else {
-            checkoutProfileState.promoDiscountMultiplier = 0.0;
-            feedbackMsg.innerText = "✖ Unknown code structure, please verify code string layout! 🎀";
-            feedbackMsg.style.color = "#ef4444";
-        }
-        recalculateOrderValues();
-    }
-
     function recalculateOrderValues() {
         let baseCost = 0;
         
@@ -1009,8 +968,6 @@
         document.getElementById('lblSummaryBase').innerText = `₱${baseCost.toLocaleString()}`;
 
         document.getElementById('shopReturnDiscountRow').style.display = !checkoutProfileState.isFirstSet ? "flex" : "none";
-
-        let bonusSavings = Math.round(baseCost * checkoutProfileState.promoDiscountMultiplier);
         
         const shippingLabel = document.getElementById('lblSummaryShipping');
         const shippingRow = document.getElementById('shopShippingRow');
@@ -1027,10 +984,7 @@
             }
         }
 
-        let absoluteNetTotal = baseCost - bonusSavings + checkoutProfileState.shippingFee;
-
-        document.getElementById('lblPromoSavings').innerText = `-₱${bonusSavings.toLocaleString()}`;
-        document.getElementById('shopPromoDiscountRow').style.display = bonusSavings > 0 ? "flex" : "none";
+        let absoluteNetTotal = baseCost + checkoutProfileState.shippingFee;
         
         document.getElementById('lblSummaryTotal').innerText = `₱${absoluteNetTotal.toLocaleString()}`;
     }
@@ -1053,10 +1007,9 @@
         }
 
         let baseCost = checkoutProfileState.dosageMg === 15 ? (checkoutProfileState.isFirstSet ? 1899 : 1699) : (checkoutProfileState.isFirstSet ? 2399 : 2199);
-        let bonusSavings = Math.round(baseCost * checkoutProfileState.promoDiscountMultiplier);
-        let absoluteNetTotal = baseCost - bonusSavings + checkoutProfileState.shippingFee;
+        let absoluteNetTotal = baseCost + checkoutProfileState.shippingFee;
 
-        // 📝 Manifest Setup intended for yhnawork@icloud.com
+        // 📝 Manifest Setup intended for admin
         let manifestDataLog = `--- NEW PEPTIDE SHOP ORDER MANIFEST ---\n`;
         manifestDataLog += `Customer Name: ${nameKey}\n`;
         manifestDataLog += `Customer Email: ${mailKey}\n`;
@@ -1084,24 +1037,38 @@
         checkoutButton.innerText = "Processing Your Order... ⏳💖";
         checkoutButton.disabled = true;
 
-        // Configuration arguments map to EmailJS template definitions variables
-        let emailPayloadParams = {
-            admin_target_email: "yhnawork@icloud.com",
+        // Payload 1: Sent directly to your Admin Email (ilovetteynakaydr@outlook.com)
+        let adminPayload = {
+            admin_target_email: "ilovetteynakaydr@outlook.com", 
             customer_email: mailKey,
             customer_name: nameKey,
             order_manifest_body: manifestDataLog,
             customer_thankyou_body: sweetCustomerThankYouMessage
         };
 
-        // Live transactional request execution block
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailPayloadParams)
+        // Payload 2: Sent directly to the Customer's Email address
+        let customerPayload = {
+            admin_target_email: mailKey, 
+            customer_email: mailKey,
+            customer_name: nameKey,
+            order_manifest_body: manifestDataLog,
+            customer_thankyou_body: sweetCustomerThankYouMessage
+        };
+
+        // Fire the first email to you
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, adminPayload)
+            .then(function() {
+                // Once yours succeeds, immediately fire the second one to the customer
+                return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, customerPayload);
+            })
             .then(function(response) {
+                // Both successful!
                 alert(`✨ Hurrah, bestie! Your order was successfully placed!\n\n1. The order manifest has been securely dispatched to our fulfillment team.\n2. A cute, personalized confirmation email has been sent to ${mailKey}. 💕`);
                 checkoutButton.innerText = "Complete Purchase Checkout 💳";
                 checkoutButton.disabled = false;
                 closeModal();
             }, function(error) {
-                console.error("EmailJS Transaction Failure Logging:", error);
+                console.error("EmailJS Multi-Route failure:", error);
                 alert("Oopsy! Something went wrong while saving your order routing requests. Please try again in a few moments, bestie! 🎀");
                 checkoutButton.innerText = "Complete Purchase Checkout 💳";
                 checkoutButton.disabled = false;
